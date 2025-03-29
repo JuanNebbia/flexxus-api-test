@@ -1,10 +1,13 @@
 import * as articulosService from "../services/articulos.service.js"
+import { HttpResponse } from "../utils/httpResponse.js";
+import { httpStatus } from "../utils/httpStatus.js";
 
 export const getAllArticulos = async (req, res, next) => {
     const filters = req.query
   try {
     const articulos = await articulosService.getAll(filters);
-    res.json(articulos);
+    const response = new HttpResponse(httpStatus.SUCCESS, "Article found", articulos)
+    res.status(httpStatus.SUCCESS).json(response);
   } catch (error) {
     next(error)
   }
@@ -14,7 +17,8 @@ export const getArticuloById = async (req, res, next) => {
     const { id } = req.params
   try {
     const articulo = await articulosService.getOneById(id);
-    res.json(articulo);
+    const response = new HttpResponse(httpStatus.SUCCESS, "Articles found", articulo)
+    res.status(httpStatus.SUCCESS).json(response);
   } catch (error) {
     next(error)
   }
@@ -24,10 +28,8 @@ export const createArticulo = async (req, res, next) => {
     const { body } = req
   try {
     const articulo = await articulosService.createOne(body);
-    if(!articulo){
-      return res.status(500).json('Article not created')
-    }
-    res.json(articulo);
+    const response = new HttpResponse(httpStatus.CREATED, "Article successfully created", articulo)
+    res.status(httpStatus.CREATED).json(response);
   } catch (error) {
     next(error)
   }
@@ -38,7 +40,8 @@ export const updateArticulo = async (req, res, next) => {
     const { id } = req.params 
   try {
     const articulo = await articulosService.updateOne(id, body);
-    res.json(articulo);
+    const response = new HttpResponse(httpStatus.SUCCESS, "Article successfully updated", articulo)
+    res.status(httpStatus.SUCCESS).json(response);
   } catch (error) {
     next(error)
   }
@@ -47,10 +50,9 @@ export const updateArticulo = async (req, res, next) => {
 export const deleteArticulo = async (req, res, next) => {
     const { id } = req.params 
   try {
-    const articulo = await articulosService.deleteOne(id);
-    res.json(articulo);
+    await articulosService.deleteOne(id);
+    res.status(httpStatus.NO_CONTENT).send()
   } catch (error) {
     next(error)
   }
 };
-

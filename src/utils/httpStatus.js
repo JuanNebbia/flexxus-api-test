@@ -1,6 +1,6 @@
 export const httpStatus = {
     CONTINUE: 100,
-    OK: 200,
+    SUCCESS: 200,
     CREATED: 201,
     NO_CONTENT: 204,
     NOT_MODIFIED: 304,
