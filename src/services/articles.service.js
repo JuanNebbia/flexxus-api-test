@@ -1,38 +1,39 @@
-import Articulo from "../models/articulo.model.js";
+import Article from "../models/articles.model.js";
 import { HttpError } from "../utils/httpError.js";
 import { httpStatus } from "../utils/httpStatus.js";
 
 export const getAll = async (filters = {}) => {
-    const articulos = await Articulo.findAll({ where: filters });
-    return articulos
+    const articles = await Article.findAll({ where: filters });
+    return articles
 };
 
 export const getOneById = async (id) => {
-    const articulo = await Articulo.findByPk(id);
-    if(!articulo){
+    const article = await Article.findByPk(id);
+    if(!article){
         throw new HttpError(httpStatus.NOT_FOUND, 'Article not found')
     }
-    return articulo
+    return article
 };
 
 export const createOne = async (body) => {
-    const articulo = await Articulo.create(body);
-    return articulo
+    const article = await Article.create(body);
+    return article
 };
 
 export const updateOne = async (id, body) => {
-    const articulo = await Articulo.findByPk(id);
-    if(!articulo){
+    const article = await Article.findByPk(id);
+    if(!article){
         throw new HttpError(httpStatus.NOT_FOUND, 'Article not found')
     }
-    return articulo;
+    article.update(body)
+    return article;
 };
 
 export const deleteOne = async (id) => {
-    const articulo = await Articulo.findByPk(id);
-    if(!articulo){
+    const article = await Article.findByPk(id);
+    if(!article){
         throw new HttpError(httpStatus.NOT_FOUND, 'Article not found')
     }
-    await articulo.update({ status: false});
-    return articulo;
+    await article.update({ status: false});
+    return article;
 };

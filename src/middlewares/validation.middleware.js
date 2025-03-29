@@ -10,25 +10,25 @@ const validateRequest = (req, res, next) => {
   next();
 };
 
-export const validateGetArticulos = [
+export const validateGetArticles = [
     query("name").optional().isString(),
     query("status").optional().isBoolean().withMessage("status field must be a valid boolean"),
     validateRequest,
 ];
 
-export const validateGetArticulo = [
+export const validateGetArticle = [
     param("id").isUUID().withMessage("id must be a valid uuid"),
     validateRequest,
 ];
 
-export const validateCreateArticulo = [
+export const validateCreateArticle = [
   body("name").notEmpty().withMessage("name field is required").isString().withMessage("name field must be a string"),
   body("brand").notEmpty().withMessage("brand field is required").isString().withMessage("brand field must be a string"),
   body("status").optional().isBoolean().withMessage("status field must be a boolean"),
   validateRequest,
 ];
 
-export const validateUpdateArticulo = [
+export const validateUpdateArticle = [
   param("id").isUUID().withMessage("id must be a valid uuid"),
   body("name").optional().isString().withMessage("name field must be a string"),
   body("brand").optional().isString().withMessage("brand field must be a string"),
@@ -36,7 +36,7 @@ export const validateUpdateArticulo = [
   validateRequest,
 ];
 
-export const validateDeleteArticulo = [
+export const validateDeleteArticle = [
     param("id").isUUID().withMessage("id must be a valid uuid"),
     validateRequest,
 ];

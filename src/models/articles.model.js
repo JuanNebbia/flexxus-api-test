@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-const Articulo = sequelize.define(
-  "Articulo",
+const Article = sequelize.define(
+  "Article",
   {
     id: {
       type: DataTypes.UUID,
@@ -34,4 +34,4 @@ const Articulo = sequelize.define(
   }
 );
 
-export default Articulo;
+export default Article;
