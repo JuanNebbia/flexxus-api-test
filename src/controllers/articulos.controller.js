@@ -6,7 +6,7 @@ export const getAllArticulos = async (req, res, next) => {
     const filters = req.query
   try {
     const articulos = await articulosService.getAll(filters);
-    const response = new HttpResponse(httpStatus.SUCCESS, "Article found", articulos)
+    const response = new HttpResponse(httpStatus.SUCCESS, "Articles found", articulos)
     res.status(httpStatus.SUCCESS).json(response);
   } catch (error) {
     next(error)
@@ -17,7 +17,7 @@ export const getArticuloById = async (req, res, next) => {
     const { id } = req.params
   try {
     const articulo = await articulosService.getOneById(id);
-    const response = new HttpResponse(httpStatus.SUCCESS, "Articles found", articulo)
+    const response = new HttpResponse(httpStatus.SUCCESS, "Article found", articulo)
     res.status(httpStatus.SUCCESS).json(response);
   } catch (error) {
     next(error)
