@@ -25,7 +25,6 @@ export const updateOne = async (id, body) => {
     if(!articulo){
         throw new HttpError(httpStatus.NOT_FOUND, 'Article not found')
     }
-    console.log(await articulo.update(body));
     return articulo;
 };
 

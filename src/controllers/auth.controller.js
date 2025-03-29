@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { HttpError } from "../utils/httpError.js";
 import { httpStatus } from "../utils/httpStatus.js";
+import { HttpResponse } from "../utils/httpResponse.js";
 
 export const login = (req, res, next) => {
     const { username, password } = req.body;
@@ -12,11 +13,10 @@ export const login = (req, res, next) => {
         const token = jwt.sign({ username }, process.env.JWT_SECRET, {
           expiresIn: '2h',
         });
-      
-        res.json({ token });
-        
+
+        const response = new HttpResponse(httpStatus.SUCCESS, "Logged in", { token })
+        res.status(httpStatus.SUCCESS).json(response);
     } catch (error) {
         next(error)
     }
-
 };
