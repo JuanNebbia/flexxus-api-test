@@ -36,16 +36,16 @@ La API sigue una arquitectura por capas para garantizar escalabilidad y facilida
 - Controladores
 - Servicios
 - Middlewares:
-- Autenticación y control de acceso mediante JWT
-- Validación de datos de entrada
-- Manejo centralizado de errores
+  - Autenticación y control de acceso mediante JWT
+  - Validación de datos de entrada
+  - Manejo centralizado de errores
 
 Esta estructura modular permite una separación clara de responsabilidades y facilita futuras extensiones del sistema.
 
 ### 2. Seguridad en las Rutas
 Se implementó un sistema de autenticación basado en **JWT**. El proceso de login utiliza credenciales fijas definidas en variables de entorno para simplificar las pruebas. Una vez autenticado, el usuario obtiene un token, que es obligatorio para acceder a endpoints protegidos. La validación del token se realiza mediante un middleware dedicado.
 
-Además, se configuró **CORS** para controlar el acceso a la API. Actualmente, se permite cualquier origen con fines de prueba, pero la configuración es fácilmente ajustable para restringir el acceso a dominios específicos
+Además, se configuró **CORS** para controlar el acceso a la API. Actualmente, se permite cualquier origen con fines de prueba, pero la configuración es fácilmente ajustable para restringir el acceso a dominios específicos.
 
 ### 3. Validación de Datos
 La API implementa validaciones en dos niveles:
@@ -120,7 +120,7 @@ Se incluye un sistema elemental de autenticación para proteger rutas sensibles.
 
 Antes de acceder a rutas protegidas, obtener un token JWT:
 ```sh
-curl -X POST http://localhost:3000/login -d '{"username": "admin", "password": "Admin123"}' -H "Content-Type: application/json"
+curl -X POST http://localhost:3000/auth/login -d '{"username": "admin", "password": "Admin123"}' -H "Content-Type: application/json"
 ```
 El token obtenido se debe pasar en la cabecera de las rutas proegidas.
 

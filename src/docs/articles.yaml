@@ -11,6 +11,25 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "0d23d933-11ba-41be-8d70-f09efded45b2"
+        name:
+          type: string
+          example: "Alfajor"
+        brand:
+          type: string
+          example: "Terrabusi"
+        updatedAt: 
+          type: string
+          example: "2025-03-30T18:00:14.448Z"
+        status:
+          type: boolean
+          example: true
     SuccessfullResponse:
       type: object
       properties:
@@ -21,11 +40,9 @@ components:
           type: string
           example: "Article Found"
         data:
-          oneOf:
-            - type: object
-            - type: array
-              items:
-                type: object
+            type: object
+            schema:
+            $ref: "#/components/schemas/Article"
     ValidationErrorResponse:
       type: object
       properties:
@@ -73,6 +90,7 @@ components:
         error: 
           type: string
           example: "Error interno del servidor"
+
 paths:
   /articles:
     get:
@@ -101,7 +119,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessfullResponse"
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Articles Found"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Article"
         400:
           description: Datos incorrectos 
           content:
@@ -147,6 +176,19 @@ paths:
       responses:
         201:
           description: Artículo creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Article successfully created"
+                  data:
+                    $ref: "#/components/schemas/Article"
         400:
           description: Datos incorrectos 
           content:
@@ -179,11 +221,20 @@ paths:
           description: UUID del artículo a obtener
       responses:
         200:
-          description: Lista de artículos obtenida exitosamente
+          description: Artículo obtenido exitosamente
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessfullResponse"
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Article Found"
+                  data:
+                    $ref: "#/components/schemas/Article"
         400:
           description: UUID inválido
           content:
@@ -264,7 +315,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
-      summary: Eliminar un artículo por UUID (requiere JWT)
+      summary: Desactivar un artículo por UUID (requiere JWT)
       tags:
         - Artículos
       security:
