@@ -1,0 +1,304 @@
+openapi: 3.0.0
+info:
+  title: API de Artículos
+  description: Documentación de los endpoints relacionados con artículos
+  version: 1.0.0
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SuccessfullResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: "Article Found"
+        data:
+          oneOf:
+            - type: object
+            - type: array
+              items:
+                type: object
+    ValidationErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Validation Failed"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                example: "field"
+              value:
+                type: string
+                example: "a44e6ae0-c2c1-4e20-a93d"
+              msg:
+                type: string
+                example: "id must be a valid uuid"
+              path:
+                type: string
+                example: "id"
+              location:
+                type: string
+                example: "params"
+    NotFoundErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        error: 
+          type: string
+          example: "Article not found"
+    InternalServerErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 500
+        error: 
+          type: string
+          example: "Error interno del servidor"
+paths:
+  /articles:
+    get:
+      summary: Obtener todos los artículos
+      tags:
+        - Artículos
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+          description: Filtrar artículos por nombre
+          example: "alfajor"
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: ["true", "false"]
+          required: false
+          description: Filtrar artículos según su estado
+          example: true
+      responses:
+        200:
+          description: Lista de artículos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfullResponse"
+        400:
+          description: Datos incorrectos 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        403:
+          description: Prohibido por CORS
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+    post:
+      summary: Crear un nuevo artículo (requiere JWT)
+      tags:
+        - Artículos
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - brand
+              properties:
+                name:
+                  type: string
+                  description: Nombre del artículo (único)
+                  example: "Alfajor Triple"
+                brand:
+                  type: string
+                  description: Marca del artículo
+                  example: "Terrabusi"
+                status:
+                  type: boolean
+                  description: Estado del artículo (activo/inactivo)
+                  example: true
+      responses:
+        201:
+          description: Artículo creado exitosamente
+        400:
+          description: Datos incorrectos 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        401:
+          description: No autorizado, se requiere un token válido
+        403:
+          description: Prohibido por CORS
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+  /articles/{id}:
+    get:
+      summary: Obtener un artículo por UUID
+      tags:
+        - Artículos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "a44e6ae0-c2c1-4e20-a932-107ca8fd80c9"
+          description: UUID del artículo a obtener
+      responses:
+        200:
+          description: Lista de artículos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfullResponse"
+        400:
+          description: UUID inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        403:
+          description: Prohibido por CORS
+        404:
+          description: Recurso no encontrado 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+    patch:
+      summary: Actualizar un artículo por ID (requiere JWT)
+      tags:
+        - Artículos
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "a44e6ae0-c2c1-4e20-a932-107ca8fd80c9"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Nuevo nombre de artículo"
+                brand:
+                  type: string
+                  example: "Nueva marca de artículo"
+                status:
+                  type: boolean
+                  example: false
+      responses:
+        200:
+          description: Lista de artículos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessfullResponse"
+        400:
+          description: Datos incorrectos 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        401:
+          description: No autorizado, se requiere un token válido
+        403:
+          description: Prohibido por CORS
+        404:
+          description: Recurso no encontrado 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
+    delete:
+      summary: Eliminar un artículo por UUID (requiere JWT)
+      tags:
+        - Artículos
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "a44e6ae0-c2c1-4e20-a932-107ca8fd80c9"
+      responses:
+        204:
+          description: Artículo eliminado exitosamente
+        400:
+          description: Datos incorrectos 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+        401:
+          description: No autorizado, se requiere un token válido
+        403:
+          description: Prohibido por CORS
+        404:
+          description: Recurso no encontrado 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
