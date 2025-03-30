@@ -134,8 +134,14 @@ Se debe obviar esta variable para establecer una conexión con una base de datos
 Se incluye un sistema elemental de autenticación para proteger rutas sensibles. Las credenciales del administrador son definidas en variables de entorno.
 
 Antes de acceder a rutas protegidas, obtener un token JWT:
+
+**Local**
 ```sh
 curl -X POST http://localhost:3000/auth/login -d '{"username": "admin", "password": "Admin123"}' -H "Content-Type: application/json"
+```
+**Despliegue**
+```sh
+curl -X POST https://flexxus-api-test-production.up.railway.app/auth/login -d '{"username": "admin", "password": "Admin123"}' -H "Content-Type: application/json"
 ```
 El token obtenido se debe pasar en la cabecera de las rutas proegidas.
 
@@ -214,6 +220,9 @@ DELETE /articles/{id}
 Para acceder a la documentación interactiva:
 - Iniciar la API y abrir en el navegador:
   ```
-  http://localhost:3000/api-docs
+  http://localhost:3000/api-docs 
   ```
-
+- Ingresar a la API del despliegue:
+  ```
+  https://flexxus-api-test-production.up.railway.app/api-docs
+  ```

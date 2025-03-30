@@ -14,12 +14,16 @@ const swaggerDefinition = {
   info: {
     title: "API de Artículos",
     version: "1.0.0",
-    description: "Documentación de la API",
+    description: "Documentación de la API de artículos para evaluación de Flexxus",
   },
   servers: [
     {
       url: "http://localhost:3000",
       description: "Servidor local",
+    },
+    {
+      url: "https://flexxus-api-test-production.up.railway.app",
+      description: "Servidor Railway",
     },
   ],
 };
