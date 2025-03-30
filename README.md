@@ -13,6 +13,7 @@
     - [6. Documentación del API](#6-documentación-del-api)
     - [7. Repositorio de Código](#7-repositorio-de-código)
   - [Requisitos Previos](#requisitos-previos)
+  - [Despliegue](#despliegue)
   - [Instalación y Configuración](#instalación-y-configuración)
   - [Uso de la API](#uso-de-la-api)
     - [Autenticación](#autenticación)
@@ -61,6 +62,7 @@ El código sigue buenas prácticas de desarrollo, priorizando la claridad, reuti
 
 ### 5. Conexión a la Base de Datos
 La API se conecta a una base de datos **PostgreSQL** en entorno local. Se implementó un mecanismo de reintentos automáticos para mitigar fallos temporales en la conexión y mejorar la estabilidad del sistema.
+Se valida la existencia de la variable de entorno DB_URL para distinguir entre la configuración en local y la configuración para el despliegue.
 
 ### 6. Documentación del API
 Además de este documento, la API cuenta con una documentación completa en Swagger, que detalla:
@@ -83,6 +85,18 @@ https://github.com/JuanNebbia/flexxus-api-test.git
 - Base de datos PostgreSQL
 - Archivo `.env` con las variables de entorno necesarias
  
+## Despliegue
+Actualmente hay una versión de la API desplegada en Railway. Se puede acceder entrando a https://flexxus-api-test-production.up.railway.app/
+
+Se ha desplegado en la capa gratuita del proveedor, por lo que puede estar caída en caso de transcurrir mucho tiempo.
+
+Así como la API, la base de datos también ha sido desplegada, si se quiere utilizar en local la base de datos remota, se debe introducir la varialbe de entorno:
+ ```env
+  DB_URL=postgresql://postgres:SqeiFdHlVvutbUDNVFfmgbyxzuVxJKPX@postgres railway.internal:5432/railway
+ ```
+
+Se debe obviar esta variable para establecer una conexión con una base de datos local.
+
 ## Instalación y Configuración
 1. Clonar el repositorio:
    ```sh
@@ -102,6 +116,7 @@ https://github.com/JuanNebbia/flexxus-api-test.git
     DB_USER=postgres
     DB_PASSWORD=postgrespass
     DB_NAME=flexxus
+    DB_URL=postgresql://postgres:SqeiFdHlVvutbUDNVFfmgbyxzuVxJKPX@postgres railway.internal:5432/railway (solo usar si se quiere conectar con la db desplegada)
 
     JWT_SECRET=mysecretkey
 
