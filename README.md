@@ -152,6 +152,12 @@ El token obtenido se debe pasar en la cabecera de las rutas proegidas.
 GET /articles
 ```
 
+**Query**
+```
+  name: Filtra artículos por el nombre (opcional)
+  status: Filtra artículos por el estado (opcional)
+```
+
 #### 🔹 Obtener un artículo por UUID
 ```http
 GET /articles/{id}
